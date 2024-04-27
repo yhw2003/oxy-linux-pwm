@@ -14,7 +14,7 @@ impl PwmChannel {
             chip,
             channel,
         };
-        ele.export();
+        let _ = ele.export();
         ele
     }
 
@@ -32,12 +32,14 @@ impl PwmChannel {
         sysfs::set_polarity(self.chip.0, self.channel, polarity).unwrap();
     }
 
-    fn export(&self) {
-        sysfs::export(self.chip.0, self.channel).unwrap();
+    fn export(&self) -> Result<(), io::Error> {
+        sysfs::export(self.chip.0, self.channel)?;
+        Ok(())
     }
     
-    fn unexport(&self) {
-        sysfs::unexport(self.chip.0, self.channel).unwrap();
+    fn unexport(&self) -> Result<(), io::Error> {
+        sysfs::unexport(self.chip.0, self.channel)?;
+        Ok(())
     }
 
     pub fn enable(&self) -> Result<(), io::Error> {
@@ -52,13 +54,14 @@ impl PwmChannel {
 
 }
 
-// impl Drop for PwmChannel{
-//     fn drop(&mut self) {
-//         let _ = self.disable();
-//         self.set_duty_cycle(Duration::from_nanos(0));
-//         self.set_period(Duration::from_nanos(0));
-//         self.set_polarity(sysfs::Polarity::Normal);
-//         self.unexport();
-//     }
+// TODO: Implement Drop for PwmChannel(Bug)
+impl Drop for PwmChannel{
+    fn drop(&mut self) {
+        self.set_duty_cycle(Duration::from_nanos(0));
+        self.set_period(Duration::from_nanos(0));
+        self.set_polarity(sysfs::Polarity::Normal);
+        let _ = self.disable();
+        let _ = self.unexport();
+    }
     
-// }
+}
