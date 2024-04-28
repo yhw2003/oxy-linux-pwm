@@ -2,6 +2,14 @@
 name = "oxy-linux-pwm"
 version = "0.1.0"
 edition = "2021"
+authors = ["Haowu Yang haowuyang787@gmail.com"]
+description = "A crate for controlling the PWM on the linux"
+readme = "README.md"
+license = "MIT"
+categories = ["embedded", "hardware-support"]
+keywords = ["raspberry", "pi", "embedded-hal", "embedded-hal-impl", "hal"]
+repository = "https://github.com/yhw2003/oxy-linux-pwm"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
