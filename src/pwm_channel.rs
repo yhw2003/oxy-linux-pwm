@@ -58,7 +58,7 @@ impl PwmChannel {
 impl Drop for PwmChannel{
     fn drop(&mut self) {
         self.set_duty_cycle(Duration::from_nanos(0));
-        self.set_period(Duration::from_nanos(0));
+        self.set_period(Duration::from_nanos(10000));
         self.set_polarity(sysfs::Polarity::Normal);
         let _ = self.disable();
         let _ = self.unexport();

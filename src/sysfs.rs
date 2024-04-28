@@ -28,7 +28,7 @@ pub fn reset_all() {
         for channel in 0..channel_count {
             let _ = export(chip, channel);
             let _ = enable(chip, channel);
-            let _ = set_period(chip, channel, 0);
+            let _ = set_period(chip, channel, 10000);
             let _ = set_duty_cycle(chip, channel, 0);
             let _ = set_polarity(chip, channel, Polarity::Normal);
             let _ = disable(chip, channel);
