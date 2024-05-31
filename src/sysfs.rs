@@ -24,7 +24,6 @@ pub fn reset_all() {
     let chip_count = get_chip_count().unwrap();
     for chip in 0..chip_count {
         let channel_count = get_channel_count(chip).unwrap();
-        println!("Channel count for chip {}: {}", chip, channel_count);
         for channel in 0..channel_count {
             let _ = export(chip, channel);
             let _ = enable(chip, channel);
@@ -195,9 +194,7 @@ pub fn get_chip_count() -> Result<u8, io::Error> {
 
 pub fn get_channel_count(pwm_chip: u8) -> Result<u8, io::Error> {
     let path = format!("/sys/class/pwm/pwmchip{}", pwm_chip);
-    println!("Path: {}", path);
     let path = Path::new(&path);
-    println!("exists: {:?}", path.exists());
     if path.exists() {
         let buffer = &mut String::new();
         File::open(path.join("npwm"))?.read_to_string(buffer)?;

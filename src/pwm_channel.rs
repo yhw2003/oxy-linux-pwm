@@ -18,14 +18,14 @@ impl PwmChannel {
         ele
     }
 
-    pub fn set_period(&self, period_ns: Duration) {
+    pub fn set_period(&self, period_ns: Duration) -> Result<(), io::Error> {
         let p = period_ns.as_nanos() as u64;
-        sysfs::set_period(self.chip.0, self.channel, p).unwrap();
+        sysfs::set_period(self.chip.0, self.channel, p)
     }
 
-    pub fn set_duty_cycle(&self, duty_cycle_ns: Duration) {
+    pub fn set_duty_cycle(&self, duty_cycle_ns: Duration) -> Result<(), io::Error> {
         let d = duty_cycle_ns.as_nanos() as u64;
-        sysfs::set_duty_cycle(self.chip.0, self.channel, d).unwrap();
+        sysfs::set_duty_cycle(self.chip.0, self.channel, d)
     }
 
     pub fn set_polarity(&self, polarity: sysfs::Polarity) {
@@ -57,8 +57,8 @@ impl PwmChannel {
 // TODO: Implement Drop for PwmChannel(Bug)
 impl Drop for PwmChannel{
     fn drop(&mut self) {
-        self.set_duty_cycle(Duration::from_nanos(0));
-        self.set_period(Duration::from_nanos(10000));
+        let _ = self.set_duty_cycle(Duration::from_nanos(0));
+        let _ = self.set_period(Duration::from_nanos(10000));
         self.set_polarity(sysfs::Polarity::Normal);
         let _ = self.disable();
         let _ = self.unexport();
